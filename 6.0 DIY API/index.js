@@ -20,7 +20,7 @@ app.get('/jokes/:id', (req, res) => {
   res.json(chosenJoke);
 });
 
-//3. GET a jokes by filtering on the joke type
+//3. GET a joke by filtering on the joke type
 app.get('/filter', (req, res) => {
   const type = req.query.type;
   const filteredJokes = jokes.filter(joke => joke.jokeType === type);
@@ -45,8 +45,34 @@ app.put('/jokes/:id', (req, res) => {
 });
 
 //6. PATCH a joke
+app.patch('/jokes/:id', (req, res) => {
+  const id = req.params.id;
+  const jokeToPatchIndex = jokes.findIndex((joke) => joke.id === parseInt(id));
+  if(req.body.jokeText) {
+    jokes[jokeToPatchIndex].jokeText = req.body.jokeText;
+  } else {
+    jokes[jokeToPatchIndex].jokeType = req.body.jokeType;
+  }
+  res.json(jokes[jokeToPatchIndex]);
+});
+// app.patch('/jokes/:id', (req, res) => {
+//   const id = parseInt (req.params.id);
+//   const jokeToPatchIndex = jokes.findIndex((joke) => joke.id === id);
+//   const newJoke = {
+//     id: id,
+//     jokeText: req.body.jokeText || jokes[jokeToPatchIndex].jokeText,
+//     jokeType: req.body.jokeType || jokes[jokeToPatchIndex].jokeType,
+//   }
+//   jokes[jokeToPatchIndex] = newJoke;
+//   res.json(jokes[jokeToPatchIndex]);
+// });
 
 //7. DELETE Specific joke
+app.delete('/jokes/:id', (req, res) => {
+  const selectedId = (parseInt(req.params.id));
+  jokes.splice(selectedId-1, 1);
+  res.json(jokes[selectedId]);
+});
 
 //8. DELETE All jokes
 
